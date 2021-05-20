@@ -1,5 +1,5 @@
 {
-  "pluginName": "深色与浅色模式",
+  "pluginName": "深色与浅色模式切换",
   "description": "Windows 深色与浅色模式切换",
   "preload": "preload.js",
   "author": "Trent0",
@@ -15,7 +15,8 @@
         "win32"
       ],
       "cmds": [
-        "深色与浅色模式",
+        "模式切换",
+        "深色与浅色",
         "Dark & Light"
       ]
     }
