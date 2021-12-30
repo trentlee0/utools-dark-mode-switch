@@ -1,10 +1,37 @@
-module.exports = () => {
-  // AppleScript
+/* AppleScript */
+
+function getCommand(script) {
+  return `osascript -e '${script}'`
+}
+
+function switchScript() {
   return `
-  tell application "System Events"
-    tell appearance preferences
-        set dark mode to not dark mode
+    tell application "System Events"
+      tell appearance preferences
+          set dark mode to not dark mode
+      end tell
     end tell
-  end tell
-  `
+    `
+}
+
+function switchToScript(mode) {
+  return `
+    tell application "System Events"
+      tell appearance preferences
+          set dark mode to ${mode}
+      end tell
+    end tell
+    `
+}
+
+module.exports = {
+  switchCommand() {
+    return getCommand(switchScript())
+  },
+  switchToDarkCommand() {
+    return getCommand(switchToScript(true))
+  },
+  switchToLightCommand() {
+    return getCommand(switchToScript(false))
+  },
 }

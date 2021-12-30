@@ -3,18 +3,18 @@
   "description": "深色与浅色模式切换",
   "preload": "preload.js",
   "author": "Trent0",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/trentlee0/uTools-dark-mode-switch",
-  "logo": "logo.png",
+  "logo": "icon/day-night.png",
   "platform": [
     "win32",
     "darwin"
   ],
   "features": [
     {
-      "code": "dark-night",
+      "code": "dark-light",
       "explain": "深色与浅色模式切换",
-      "icon": "logo.png",
+      "icon": "icon/day-night.png",
       "platform": [
         "win32",
         "darwin"
@@ -22,7 +22,34 @@
       "cmds": [
         "模式切换",
         "深色与浅色",
-        "Dark & Light"
+        "Dark & Light",
+        "Dark Light"
+      ]
+    },
+    {
+      "code": "to-dark",
+      "explain": "切换到深色模式",
+      "icon": "icon/night.png",
+      "platform": [
+        "win32",
+        "darwin"
+      ],
+      "cmds": [
+        "切换到深色模式",
+        "To Dark"
+      ]
+    },
+    {
+      "code": "to-light",
+      "explain": "切换到浅色模式",
+      "icon": "icon/day.png",
+      "platform": [
+        "win32",
+        "darwin"
+      ],
+      "cmds": [
+        "切换到浅色模式",
+        "To Light"
       ]
     }
   ]
