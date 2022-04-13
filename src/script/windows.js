@@ -27,6 +27,19 @@ function switchToScript(mode) {
   return script.replace(/\n/g, '')
 }
 
+function getDarkMode() {
+  let script = `
+    $temp = reg.exe query HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme;
+    [int]$mode = 1;
+    if ($temp -as [string] -match '(SystemUsesLightTheme.+0x)(\\d)')
+    {
+      $mode = $Matches[2] -as [int];
+    };
+    $mode
+    `
+  return script.replace(/\n/g, '')
+}
+
 module.exports = {
   switchCommand() {
     return getCommand(switchScript())
@@ -37,4 +50,10 @@ module.exports = {
   switchToLightCommand() {
     return getCommand(switchToScript(1))
   },
+  getDarkModeCommand() {
+    return getCommand(getDarkMode())
+  },
+  isDarkMode(mode) {
+    return mode === '0'
+  }
 }

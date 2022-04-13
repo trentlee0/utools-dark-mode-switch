@@ -1,0 +1,21 @@
+{
+  "name": "utools-dark-mode-switch",
+  "version": "1.0.0",
+  "description": "深色与浅色模式切换",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trentlee0/utools-dark-mode-switch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trentlee0/utools-dark-mode-switch/issues"
+  },
+  "homepage": "https://github.com/trentlee0/utools-dark-mode-switch#readme",
+  "devDependencies": {
+    "utools-api-types": "^2.6.3"
+  }
+}

@@ -24,6 +24,16 @@ function switchToScript(mode) {
     `
 }
 
+function getDarkMode() {
+  return `
+    tell application "System Events"
+      tell appearance preferences
+          get dark mode
+      end tell
+    end tell
+    `
+}
+
 module.exports = {
   switchCommand() {
     return getCommand(switchScript())
@@ -34,4 +44,10 @@ module.exports = {
   switchToLightCommand() {
     return getCommand(switchToScript(false))
   },
+  getDarkModeCommand() {
+    return getCommand(getDarkMode())
+  },
+  isDarkMode(mode) {
+    return mode === 'true'
+  }
 }

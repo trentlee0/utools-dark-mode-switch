@@ -1,11 +1,10 @@
 const macos = require('./macos')
 const windows = require('./windows')
 
-module.exports = {
-  getMacOsCommand() {
-    return macos
-  },
-  getWindowsCommand() {
+module.exports = () => {
+  if (utools.isWindows()) {
     return windows
-  },
+  } else if (utools.isMacOs()) {
+    return macos
+  }
 }
