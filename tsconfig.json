@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "target": "ES6",
+    "experimentalDecorators": true,
+    "types": [
+      "@types/node",
+      "@types/node-schedule",
+      "utools-api-types"
+    ],
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pluginName": "深色与浅色模式切换",
+  "description": "深色与浅色模式切换 & 自动切换",
+  "preload": "preload.js",
+  "author": "Trent0",
+  "version": "1.0.0",
+  "homepage": "https://github.com/trentlee0/utools-dark-mode-switch",
+  "logo": "icon/day-night.png",
+  "platform": [
+    "win32",
+    "darwin"
+  ],
+  "features": [
+    {
+      "code": "dark-light",
+      "explain": "深色与浅色模式切换",
+      "icon": "icon/day-night.png",
+      "cmds": [
+        "模式切换",
+        "深色与浅色",
+        "Dark & Light",
+        "Dark Light"
+      ]
+    },
+    {
+      "code": "to-dark",
+      "explain": "切换到深色模式",
+      "icon": "icon/night.png",
+      "cmds": [
+        "切换到深色模式",
+        "To Dark"
+      ]
+    },
+    {
+      "code": "to-light",
+      "explain": "切换到浅色模式",
+      "icon": "icon/day.png",
+      "cmds": [
+        "切换到浅色模式",
+        "To Light"
+      ]
+    },
+    {
+      "code": "switch-setting",
+      "explain": "深色与浅色模式自动切换设置",
+      "icon": "icon/day-night.png",
+      "cmds": [
+        "自动切换设置",
+        "Auto Switch Setting"
+      ]
+    }
+  ]
+}

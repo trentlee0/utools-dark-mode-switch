@@ -1,38 +1,50 @@
-const storage = require("../storage")
+import storage from "../storage"
 
-const status = {Enable: '开启', Disable: '关闭'}
+export enum Status {
+  ENABLE,
+  DISABLE
+}
 
-const storeKey = {
+export const storeKey = {
   Status: 'status',
   ToLightTime: 'toLightTime',
   ToDarkTime: 'toDarkTime'
 }
 
-const store = {
-  status: status.Disable,
+export function convertStatus(status: Status) {
+  switch (status) {
+    case Status.DISABLE:
+      return '关闭'
+    case Status.ENABLE:
+      return '开启'
+  }
+}
+
+export const store = {
+  status: Status.DISABLE,
   toLightTime: '07:00',
   toDarkTime: '18:00',
-  setStatus(status) {
+  setStatus(status: Status) {
     this.status = status
-    list[0].description = status
+    showList[0].description = convertStatus(status)
     storage.set(storeKey.Status, status)
   },
-  setToLightTime(toLightTime) {
+  setToLightTime(toLightTime: string) {
     this.toLightTime = toLightTime
-    list[1].description = toLightTime
+    showList[1].description = toLightTime
     storage.set(storeKey.ToLightTime, toLightTime)
   },
-  setToDarkTime(toDarkTime) {
+  setToDarkTime(toDarkTime: string) {
     this.toDarkTime = toDarkTime
-    list[2].description = toDarkTime
+    showList[2].description = toDarkTime
     storage.set(storeKey.ToDarkTime, toDarkTime)
   }
 }
 
-const list = [
+export const showList = [
   {
     title: '是否开启',
-    description: store.status,
+    description: convertStatus(store.status),
     icon: 'icon/day-night.png'
   },
   {
@@ -46,10 +58,3 @@ const list = [
     icon: 'icon/night.png'
   }
 ]
-
-module.exports = {
-  status,
-  storeKey,
-  store,
-  list
-}

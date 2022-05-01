@@ -1,8 +1,8 @@
-module.exports = {
-  set(key, value) {
+export default {
+  set(key: string, value: any) {
     utools.dbStorage.setItem(key, value)
   },
-  get(key) {
+  get(key: string) {
     return utools.dbStorage.getItem(key)
   }
 }
