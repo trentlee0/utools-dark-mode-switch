@@ -1,5 +1,6 @@
-import {WindowsScript} from "./windows"
-import {MacOsScript} from "./macos"
+import {WindowsScript} from './windows'
+import {MacOsScript} from './macos'
+import {isUTools} from '@/util/common'
 
 export enum Mode {
   DARK,
@@ -20,4 +21,34 @@ export interface Script {
   isDarkMode(scriptResult: string): boolean
 }
 
-export default utools.isWindows() ? new WindowsScript() : new MacOsScript()
+class EmptyScriptImpl implements Script {
+  switchMode(): string {
+    throw new Error('Method not implemented.')
+  }
+
+  switchTo(mode: Mode): string {
+    throw new Error('Method not implemented.')
+  }
+
+  switchToDark(): string {
+    throw new Error('Method not implemented.')
+  }
+
+  switchToLight(): string {
+    throw new Error('Method not implemented.')
+  }
+
+  getDarkMode(): string {
+    throw new Error('Method not implemented.')
+  }
+
+  isDarkMode(scriptResult: string): boolean {
+    throw new Error('Method not implemented.')
+  }
+}
+
+export default isUTools()
+    ? utools.isWindows()
+        ? new WindowsScript()
+        : new MacOsScript()
+    : new EmptyScriptImpl()
