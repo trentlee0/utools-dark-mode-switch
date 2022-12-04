@@ -1,13 +1,5 @@
 import script from '@/script'
 
-function execCommand(command: string) {
-  exec(command, (err) => {
-    if (err) {
-      utools.showNotification(`错误: ${err}`)
-    }
-  })
-}
-
 const modeActions = {
   toDark() {
     execCommand(script.switchToDark())
@@ -25,11 +17,11 @@ const modeActions = {
     execCommand(script.switchMode())
   },
   isDark() {
-    return new Promise<boolean>((resolve, reject) =>
-      exec(script.getDarkMode(), (err, stdout) =>
-        err ? reject(err) : resolve(script.isDarkMode(stdout.trim()))
-      )
-    )
+    return new Promise<boolean>((resolve, reject) => {
+      execAsync(script.getDarkMode())
+        .then((stdout) => resolve(script.isDarkMode(stdout)))
+        .catch(reject)
+    })
   }
 }
 

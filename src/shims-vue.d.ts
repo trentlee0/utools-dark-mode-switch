@@ -6,14 +6,8 @@ declare module '*.vue' {
 }
 
 declare module globalThis {
-  function exec(
-    command: string,
-    callback?: (
-      error: ExecException | null,
-      stdout: string,
-      stderr: string
-    ) => void
-  ): ChildProcess
+  function execCommand(command: string): void
+  function execAsync(command: string): Promise<string>
 
   function setTimeout<TArgs extends any[]>(
     callback: (...args: TArgs) => void,
@@ -25,13 +19,13 @@ declare module globalThis {
     timeoutId: NodeJS.Timeout | string | number | undefined
   ): void
 
-  function setInterval<TArgs extends any[]>(
+  export function setInterval<TArgs extends any[]>(
     callback: (...args: TArgs) => void,
     ms?: number,
     ...args: TArgs
   ): NodeJS.Timer
 
-  function clearInterval(
+  export function clearInterval(
     intervalId: NodeJS.Timeout | string | number | undefined
   ): void
 

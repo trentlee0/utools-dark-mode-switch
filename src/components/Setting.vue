@@ -2,14 +2,14 @@
   <el-card class="box-card" shadow="never">
     <template #header>
       <div class="card-header">
-        <span>设置</span>
+        <h4>设置</h4>
       </div>
     </template>
     <el-form label-width="100px" style="max-width: 460px">
       <el-form-item label="自动切换">
         <el-select
-            v-model="autoMode"
-            @change="autoModeChange"
+            v-model="switchMode"
+            @change="handleSwitchModeChange"
             class="m-2"
             placeholder="Select"
         >
@@ -20,14 +20,14 @@
         <el-form-item label="强制切换">
           <el-tooltip placement="right" :show-after="600">
             <template #content>开启后，每 15 秒检查；否则，仅在每次启动时检查。</template>
-            <el-switch @change="forceSwitchChange" v-model="isForceSwitch"/>
+            <el-switch @change="handleForceSwitchChange" v-model="isForceSwitch"/>
           </el-tooltip>
         </el-form-item>
       </div>
       <div v-if="isCustomMode">
         <el-form-item label="浅色模式">
           <el-time-picker
-              @visible-change="lightTimeChange"
+              @visible-change="handleLightTimeChange"
               v-model="lightTime"
               :clearable="false"
               placeholder="时间"
@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item label="深色模式">
           <el-time-picker
-              @visible-change="darkTimeChange"
+              @visible-change="handleDarkTimeChange"
               v-model="darkTime"
               :clearable="false"
               format="HH:mm"
@@ -47,15 +47,15 @@
       <div v-else-if="isCoordinateMode">
         <el-form-item label="纬度">
           <el-input
-              v-model="latitude"
-              @blur="coordinateChange"
+              v-model.number="latitude"
+              @blur="handleCoordinateChange"
               placeholder="度数"
           />
         </el-form-item>
         <el-form-item label="经度">
           <el-input
-              v-model="longitude"
-              @blur="coordinateChange"
+              v-model.number="longitude"
+              @blur="handleCoordinateChange"
               placeholder="度数"
           />
         </el-form-item>
@@ -71,68 +71,66 @@
 </template>
 
 <script setup lang="ts">
-import {Status} from '@/store'
 import {formatTime, parseTimeToDate} from '@/util/common'
-import {ref, watchEffect, computed} from 'vue'
-import {useStore, Coordinate} from '@/store'
+import {getStatusConverter} from '@/constant/status'
+import {ref, onMounted, computed} from 'vue'
+import {useStore} from '@/store'
+import {Status} from '@/constant'
+import {CoordinateModel} from '@/models/CoordinateModel'
 import {getSunrise, getSunset} from '@/util/suntime'
+
 
 const store = useStore()
 
-const lightTime = ref(new Date())
-const darkTime = ref(new Date())
-const isForceSwitch = ref(false)
+const statusConverter = getStatusConverter()
+const options = statusConverter.getLocaleStatuses()
+const isDisable = computed(() => statusConverter.localeToStatus(switchMode.value) === Status.DISABLE)
+const isCustomMode = computed(() => statusConverter.localeToStatus(switchMode.value) === Status.AUTO_TIME)
+const isCoordinateMode = computed(() => statusConverter.localeToStatus(switchMode.value) === Status.COORDINATE)
 
-const autoMode = ref<string>('经纬度')
-const options = ['关闭', '自定义时间', '经纬度']
-
-const latitude = ref(39.9)
-const longitude = ref(116.3)
-
-const isDisable = computed(() => autoMode.value === '关闭')
-const isCustomMode = computed(() => autoMode.value === '自定义时间')
-const isCoordinateMode = computed(() => autoMode.value === '经纬度')
 const sunriseTime = computed(() => getSunrise(latitude.value, longitude.value))
 const sunsetTime = computed(() => getSunset(latitude.value, longitude.value))
 
-const map = new Map<Status, string>()
-map.set(Status.DISABLE, '关闭')
-map.set(Status.AUTO_TIME, '自定义时间')
-map.set(Status.COORDINATE, '经纬度')
-
-const reverseMap = new Map<string, Status>()
-reverseMap.set('关闭', Status.DISABLE)
-reverseMap.set('自定义时间', Status.AUTO_TIME)
-reverseMap.set('经纬度', Status.COORDINATE)
-
-watchEffect(() => {
-  lightTime.value = parseTimeToDate(store.toLightTime)
-  darkTime.value = parseTimeToDate(store.toDarkTime)
-  isForceSwitch.value = store.forceSwitch
-  autoMode.value = map.get(store.status) ?? '关闭'
+const lightTime = ref<Date>(new Date())
+const darkTime = ref<Date>(new Date())
+const isForceSwitch = ref<boolean>(false)
+const switchMode = ref<string>('')
+const latitude = ref(CoordinateModel.DEFAULT.latitude)
+const longitude = ref(CoordinateModel.DEFAULT.longitude)
+onMounted(() => {
+  lightTime.value = parseTimeToDate(store.setting.toLightTime)
+  darkTime.value = parseTimeToDate(store.setting.toDarkTime)
+  isForceSwitch.value = store.setting.forceSwitch
+  switchMode.value = statusConverter.statusToLocale(store.setting.status)
+  latitude.value = store.setting.coordinate.latitude
+  longitude.value = store.setting.coordinate.longitude
 })
 
-function autoModeChange() {
-  store.setStatus(reverseMap.get(autoMode.value) ?? Status.DISABLE)
+function handleSwitchModeChange() {
+  store.setStatus(statusConverter.localeToStatus(switchMode.value))
 }
 
-function forceSwitchChange() {
+function handleForceSwitchChange() {
   store.setForceSwitch(isForceSwitch.value)
 }
 
-function coordinateChange() {
-  store.setCoordinate(Coordinate.build(latitude.value, longitude.value))
+function handleCoordinateChange() {
+  store.setCoordinate(new CoordinateModel(latitude.value, longitude.value))
 }
 
-function lightTimeChange(visibility: boolean) {
+function handleLightTimeChange(visibility: boolean) {
   if (visibility) return
   store.setToLightTime(formatTime(lightTime.value))
 }
 
-function darkTimeChange(visibility: boolean) {
+function handleDarkTimeChange(visibility: boolean) {
   if (visibility) return
   store.setToDarkTime(formatTime(darkTime.value))
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.box-card {
+  border: none;
+}
+</style>

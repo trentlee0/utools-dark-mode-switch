@@ -52,8 +52,8 @@
       "explain": "深色与浅色模式切换设置",
       "icon": "icon/day-night.png",
       "cmds": [
-        "设置",
-        "Setting"
+        "深色与浅色模式切换设置",
+        "Dark Mode Switch Setting"
       ]
     }
   ]

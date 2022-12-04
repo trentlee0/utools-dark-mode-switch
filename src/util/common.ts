@@ -1,9 +1,10 @@
 export function isUTools() {
+  if (process.env.NODE_ENV === 'production') return true
   return Reflect.has(window, 'utools')
 }
 
 export function stringFill(obj: any, len: number, fill?: any) {
-  return (obj + '').padStart(len, fill?.toString())
+  return obj.toString().padStart(len, fill?.toString())
 }
 
 export function formatTime(date: Date) {
@@ -18,10 +19,10 @@ export function diffMillis(source: Date, target: Date) {
 }
 
 export function timeToDate(
-  hour: number,
-  minute: number,
-  second: number = 0,
-  millis: number = 0
+    hour: number,
+    minute: number,
+    second: number = 0,
+    millis: number = 0
 ) {
   const d = new Date()
   d.setHours(hour)
@@ -42,10 +43,10 @@ export function nowToTargetDiffMillis(targetTime: string) {
  * @param time hh:mm
  */
 export function parseTime(time: string) {
-  let arr = time.split(':')
+  const [hour, minute] = time.split(':')
   return {
-    hour: parseInt(arr[0]),
-    minute: parseInt(arr[1])
+    hour: parseInt(hour),
+    minute: parseInt(minute)
   }
 }
 
@@ -57,6 +58,6 @@ export function parseTimeToDate(time: string) {
   return timeToDate(t.hour, t.minute)
 }
 
-export function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj))
+export function deepCopy<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value))
 }

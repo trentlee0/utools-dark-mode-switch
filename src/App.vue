@@ -13,5 +13,6 @@ useDark()
 * {
   margin: 0;
   padding: 0;
+  background: var(--el-bg-color);
 }
 </style>

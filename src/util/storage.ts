@@ -1,15 +1,19 @@
 import {isUTools} from './common'
 
-interface Storage {
-  get(key: string): any
+abstract class Storage {
+  abstract get<T>(key: string): T | null
 
-  set(key: string, value: any): void
+  abstract set(key: string, value: any): void
 
-  remove(key: string): void
+  abstract remove(key: string): void
+
+  getOrDefault<T>(key: string, defaulVal: T): T {
+    return this.get(key) ?? defaulVal
+  }
 }
 
-class UToolsStorage implements Storage {
-  get(key: string): any {
+class UToolsStorage extends Storage {
+  get<T>(key: string): T | null {
     return utools.dbStorage.getItem(key)
   }
 
@@ -22,8 +26,8 @@ class UToolsStorage implements Storage {
   }
 }
 
-class BrowserStorage implements Storage {
-  get(key: string): any {
+class BrowserStorage extends Storage {
+  get<T>(key: string): T | null {
     const value = localStorage.getItem(key)
     if (value) return JSON.parse(value)
     return null
