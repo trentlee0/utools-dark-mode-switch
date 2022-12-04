@@ -1,57 +1,41 @@
-import {Mode, Script} from "./index";
+import {Mode, Script} from './base'
 
-export class MacOsScript implements Script {
-  getDarkMode(): string {
+function appleScriptCommand(script: string) {
+  return `osascript -e '${script}'`
+}
+
+export class MacOsScript extends Script {
+  protected switchScript(): string {
     const script = `
       tell application "System Events"
-        tell appearance preferences
-            get dark mode
-        end tell
-      end tell
-      `
-    return `osascript -e '${script}'`
+          tell appearance preferences
+              set dark mode to not dark mode
+          end tell
+      end tell`
+    return appleScriptCommand(script)
   }
 
-  switchMode(): string {
+  protected switchToScript(mode: Mode): string {
     const script = `
       tell application "System Events"
-        tell appearance preferences
-            set dark mode to not dark mode
-        end tell
-      end tell
-      `
-    return `osascript -e '${script}'`
+          tell appearance preferences
+              set dark mode to ${mode === Mode.DARK}
+          end tell
+      end tell`
+    return appleScriptCommand(script)
   }
 
-  switchTo(mode: Mode): string {
-    let c
-    switch (mode) {
-      case Mode.DARK:
-        c = true
-        break
-      case Mode.LIGHT:
-        c = false
-        break
-    }
+  protected getDarkScript(): string {
     const script = `
       tell application "System Events"
-        tell appearance preferences
-            set dark mode to ${c}
-        end tell
-      end tell
-      `
-    return `osascript -e '${script}'`
+          tell appearance preferences
+              get dark mode
+          end tell
+      end tell`
+    return appleScriptCommand(script)
   }
 
-  isDarkMode(scriptResult: string): boolean {
+  protected isDarkMode(scriptResult: string): boolean {
     return scriptResult === 'true'
-  }
-
-  switchToDark(): string {
-    return this.switchTo(Mode.DARK)
-  }
-
-  switchToLight(): string {
-    return this.switchTo(Mode.LIGHT)
   }
 }

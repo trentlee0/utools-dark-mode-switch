@@ -9,7 +9,7 @@ import {useDark} from '@vueuse/core'
 useDark()
 </script>
 
-<style lang="scss">
+<style lang="css">
 * {
   margin: 0;
   padding: 0;

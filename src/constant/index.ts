@@ -1,7 +1,8 @@
 export enum FeatureCode {
   DARK_LIGHT = 'dark-light',
   TO_DARK = 'to-dark',
-  TO_LIGHT = 'to-light'
+  TO_LIGHT = 'to-light',
+  SETTING = 'setting'
 }
 
 export enum StoreKey {

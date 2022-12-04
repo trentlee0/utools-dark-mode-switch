@@ -1,28 +1,31 @@
 export function isUTools() {
-  if (process.env.NODE_ENV === 'production') return true
+  if (import.meta.env.PROD) return true
   return Reflect.has(window, 'utools')
 }
 
-export function stringFill(obj: any, len: number, fill?: any) {
-  return obj.toString().padStart(len, fill?.toString())
+export function formatTime(time: Date) {
+  const fillZero = (num: number) => num.toString().padStart(2, '0')
+  return `${fillZero(time.getHours())}:${fillZero(time.getMinutes())}`
 }
 
-export function formatTime(date: Date) {
-  const hh = stringFill(date.getHours(), 2, 0)
-  const mm = stringFill(date.getMinutes(), 2, 0)
-  return hh + ':' + mm
+export function diffMillis(start: Date, end: Date): number {
+  const diff = end.getTime() - start.getTime()
+  const day = 86400000
+  return (diff + day) % day
 }
 
-export function diffMillis(source: Date, target: Date) {
-  let ans = target.getTime() - source.getTime()
-  return ans >= 0 ? ans : 86400000 + ans
+/**
+ * @param targetTime HH:mm
+ */
+export function nowToTargetDiffMillis(targetTime: string): number {
+  return diffMillis(new Date(), parseTime(targetTime))
 }
 
-export function timeToDate(
-    hour: number,
-    minute: number,
-    second: number = 0,
-    millis: number = 0
+function newTime(
+  hour: number,
+  minute: number,
+  second: number = 0,
+  millis: number = 0
 ) {
   const d = new Date()
   d.setHours(hour)
@@ -33,29 +36,11 @@ export function timeToDate(
 }
 
 /**
- * @param targetTime hh:mm
+ * @param time HH:mm
  */
-export function nowToTargetDiffMillis(targetTime: string) {
-  return diffMillis(new Date(), parseTimeToDate(targetTime))
-}
-
-/**
- * @param time hh:mm
- */
-export function parseTime(time: string) {
+export function parseTime(time: string): Date {
   const [hour, minute] = time.split(':')
-  return {
-    hour: parseInt(hour),
-    minute: parseInt(minute)
-  }
-}
-
-/**
- * @param time hh:mm
- */
-export function parseTimeToDate(time: string) {
-  let t = parseTime(time)
-  return timeToDate(t.hour, t.minute)
+  return newTime(parseInt(hour), parseInt(minute))
 }
 
 export function deepCopy<T>(value: T): T {

@@ -1,29 +1,28 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "useDefineForClassFields": true,
     "module": "ESNext",
+    "moduleResolution": "Node",
     "strict": true,
     "jsx": "preserve",
-    "moduleResolution": "Node",
-    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": true,
-    "sourceMap": true,
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
+    "noEmit": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "utools-api-types", "element-plus/global"],
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
+    "types": ["utools-api-types", "element-plus/global"]
   },
   "include": [
+    "vite.config.ts",
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-  ],
-  "exclude": ["node_modules"]
+    "src/**/*.vue"
+  ]
 }

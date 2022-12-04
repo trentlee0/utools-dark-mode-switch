@@ -8,7 +8,7 @@
   "main": "index.html",
   "preload": "preload.js",
   "development": {
-    "main": "http://127.0.0.1:8080"
+    "main": "http://127.0.0.1:5173/"
   },
   "pluginSetting": {
     "height": 560

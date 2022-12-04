@@ -1,11 +1,22 @@
 import {formatTime, nowToTargetDiffMillis} from '@/util/common'
-import actions from './actions'
+import script from '@/script'
 
-export default {
-  timer: <NodeJS.Timeout>{},
-  interval: <NodeJS.Timer>{},
-  toLightTime: '',
-  toDarkTime: '',
+enum ModeStatus {
+  LIGHT = 0,
+  DARK = 1,
+  NO = -1
+}
+
+class Clock {
+  timer: any
+  interval: any
+  toLightTime: string
+  toDarkTime: string
+
+  constructor() {
+    this.toLightTime = ''
+    this.toDarkTime = ''
+  }
 
   start(toLightTime: string, toDarkTime: string, forceSwitch: boolean) {
     this.toLightTime = toLightTime
@@ -14,59 +25,70 @@ export default {
     if (forceSwitch) {
       this.daemon()
     }
-  },
+  }
+
   continue(forceSwitch: boolean) {
     this.handler()
     if (forceSwitch) {
       this.daemon()
     }
-  },
+  }
+
   modeCondition() {
-    let now = formatTime(new Date())
+    const now = formatTime(new Date())
     if (this.toDarkTime > this.toLightTime) {
-      // light
-      if (this.toLightTime <= now && now < this.toDarkTime) return 0
-      // dark
-      else if (this.toDarkTime <= now || now < this.toLightTime) return 1
+      if (this.toLightTime <= now && now < this.toDarkTime)
+        return ModeStatus.LIGHT
+      else if (this.toDarkTime <= now || now < this.toLightTime)
+        return ModeStatus.DARK
     } else if (this.toDarkTime < this.toLightTime) {
-      // dark
-      if (this.toDarkTime <= now && now < this.toLightTime) return 1
-      // light
-      else if (this.toLightTime <= now || now < this.toDarkTime) return 0
+      if (this.toDarkTime <= now && now < this.toLightTime)
+        return ModeStatus.DARK
+      else if (this.toLightTime <= now || now < this.toDarkTime)
+        return ModeStatus.LIGHT
     }
-    return -1
-  },
+    return ModeStatus.NO
+  }
+
   handler() {
     switch (this.modeCondition()) {
-      case 0:
-        actions.isDark().then((dark) => {
+      case ModeStatus.LIGHT:
+        script.isDarkAsync().then((dark) => {
           if (!dark) return
-          actions.toLightNoHidden()
+
+          script.toLight()
           clearTimeout(this.timer)
-          this.timer = setTimeout(() => {
-            this.handler()
-          }, nowToTargetDiffMillis(this.toDarkTime))
+          this.timer = setTimeout(
+            () => this.handler(),
+            nowToTargetDiffMillis(this.toDarkTime)
+          )
         })
         break
-      case 1:
-        actions.isDark().then((dark) => {
+      case ModeStatus.DARK:
+        script.isDarkAsync().then((dark) => {
           if (dark) return
-          actions.toDarkNoHidden()
+
+          script.toDark()
           clearTimeout(this.timer)
-          this.timer = setTimeout(() => {
-            this.handler()
-          }, nowToTargetDiffMillis(this.toLightTime))
+          this.timer = setTimeout(
+            () => this.handler(),
+            nowToTargetDiffMillis(this.toLightTime)
+          )
         })
         break
     }
-  },
+  }
+
   stop() {
     clearTimeout(this.timer)
     clearInterval(this.interval)
-  },
+  }
+
   daemon() {
     this.interval = setInterval(() => {
       this.handler()
     }, 15 * 1000)
   }
 }
+
+export default new Clock()
