@@ -9,8 +9,6 @@ import {FeatureCode} from '@/constant'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './style/css-vars.css'
 
-createApp(App).use(createPinia()).mount('#app')
-
 if (isUTools()) {
   function beforeExecute() {
     utools.hideMainWindow()
@@ -39,10 +37,10 @@ if (isUTools()) {
     console.warn(`preload.js ==> execCommand('${command}')`)
   }
   // @ts-ignore
-  window.execAsync = (command): Promise<boolean> => {
+  window.execAsync = (command): Promise<string> => {
     console.warn(`preload.js ==> execAsync('${command}')`)
-    return new Promise<boolean>((resolve) => {
-      resolve(true)
-    })
+    return new Promise<string>((resolve) => resolve(''))
   }
 }
+
+createApp(App).use(createPinia()).mount('#app')
