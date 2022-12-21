@@ -1,11 +1,10 @@
 import {isUTools} from '@/util/common'
-import {Script, EmptyScriptImpl} from '@/script/base'
+import {EmptyScript} from '@/script/common'
 import {MacOsScript} from '@/script/macos'
 import {WindowsScript} from '@/script/windows'
 
-function getScript(): Script {
-  if (!isUTools()) return new EmptyScriptImpl()
-  return utools.isWindows() ? new WindowsScript() : new MacOsScript()
-}
-
-export default getScript()
+export default (() => {
+  if (!isUTools()) return new EmptyScript()
+  if (utools.isWindows()) return new WindowsScript()
+  return new MacOsScript()
+})()

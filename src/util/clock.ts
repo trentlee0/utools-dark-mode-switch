@@ -54,7 +54,7 @@ class Clock {
     switch (this.modeCondition()) {
       case ModeStatus.LIGHT:
         console.log('light -->', nowToTargetDiffMillis(this.toDarkTime))
-        script.isDarkAsync().then((dark) => {
+        script.isDark().then((dark) => {
           if (!dark) return
 
           script.toLight()
@@ -67,7 +67,7 @@ class Clock {
         break
       case ModeStatus.DARK:
         console.log('dark -->', nowToTargetDiffMillis(this.toLightTime))
-        script.isDarkAsync().then((dark) => {
+        script.isDark().then((dark) => {
           if (dark) return
 
           script.toDark()

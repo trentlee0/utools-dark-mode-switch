@@ -1,41 +1,32 @@
-import {Mode, Script} from './base'
+import {Mode, Script} from './common'
 
-function appleScriptCommand(script: string) {
-  return `osascript -e '${script}'`
+function execAppleScript(script: string) {
+  execCommand(`osascript -e '${script}'`)
 }
 
 export class MacOsScript extends Script {
-  protected switchScript(): string {
-    const script = `
+  private commonScript(script: string) {
+    return `
       tell application "System Events"
           tell appearance preferences
-              set dark mode to not dark mode
+              ${script}
           end tell
       end tell`
-    return appleScriptCommand(script)
   }
 
-  protected switchToScript(mode: Mode): string {
-    const script = `
-      tell application "System Events"
-          tell appearance preferences
-              set dark mode to ${mode === Mode.DARK}
-          end tell
-      end tell`
-    return appleScriptCommand(script)
+  toOther(): void {
+    execAppleScript(this.commonScript(`set dark mode to not dark mode`))
   }
 
-  protected getDarkScript(): string {
-    const script = `
-      tell application "System Events"
-          tell appearance preferences
-              get dark mode
-          end tell
-      end tell`
-    return appleScriptCommand(script)
+  toMode(mode: Mode): void {
+    execAppleScript(this.commonScript(`set dark mode to ${mode === Mode.DARK}`))
   }
 
-  protected isDarkMode(scriptResult: string): boolean {
-    return scriptResult === 'true'
+  isDark(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      execAsync(this.commonScript(`get dark mode`)).then((res) =>
+        resolve(res === 'true')
+      )
+    })
   }
 }

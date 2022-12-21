@@ -1,14 +1,21 @@
 const {exec} = require('child_process')
 const {setTimeout, clearTimeout, setInterval, clearInterval} = require('timers')
 
-window.execCommand = (command) => {
-  exec(command, (err) => {
-    if (err) {
-      utools.copyText(err.toString())
-      utools.showNotification(`已复制错误: ${err}`)
-    }
-  })
+function handleError(err) {
+  if (!err) return
+  utools.copyText(err.toString())
+  utools.showNotification(`已复制错误: ${err}`)
 }
+
+
+window.execCommand = (command) => {
+  if (utools.isWindows()) {
+    exec(command, {shell: 'powershell.exe'}, handleError)
+  } else {
+    exec(command, handleError)
+  }
+}
+
 
 window.execAsync = (command) => {
   return new Promise((resolve, reject) => {
