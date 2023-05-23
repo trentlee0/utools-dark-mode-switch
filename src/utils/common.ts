@@ -1,8 +1,3 @@
-export function isUTools() {
-  if (import.meta.env.PROD) return true
-  return Reflect.has(window, 'utools')
-}
-
 export function formatTime(time: Date) {
   const fillZero = (num: number) => num.toString().padStart(2, '0')
   return `${fillZero(time.getHours())}:${fillZero(time.getMinutes())}`
@@ -41,8 +36,4 @@ function newTime(
 export function parseTime(time: string): Date {
   const [hour, minute] = time.split(':')
   return newTime(parseInt(hour), parseInt(minute))
-}
-
-export function deepCopy<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value))
 }

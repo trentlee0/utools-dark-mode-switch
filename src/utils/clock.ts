@@ -1,5 +1,5 @@
-import {formatTime, nowToTargetDiffMillis} from '@/util/common'
-import script from '@/script'
+import { formatTime, nowToTargetDiffMillis } from '@/utils/common'
+import dark from '@/utils/dark'
 
 enum ModeStatus {
   LIGHT = 0,
@@ -8,8 +8,9 @@ enum ModeStatus {
 }
 
 class Clock {
-  timer: any
-  interval: any
+  timer?: number
+  interval?: number
+
   toLightTime: string
   toDarkTime: string
 
@@ -50,33 +51,29 @@ class Clock {
     return ModeStatus.NO
   }
 
-  handler() {
+  async handler() {
     switch (this.modeCondition()) {
       case ModeStatus.LIGHT:
         console.log('light -->', nowToTargetDiffMillis(this.toDarkTime))
-        script.isDark().then((dark) => {
-          if (!dark) return
+        if (await dark.isLight()) return
 
-          script.toLight()
-          clearTimeout(this.timer)
-          this.timer = setTimeout(
-            () => this.handler(),
-            nowToTargetDiffMillis(this.toDarkTime)
-          )
-        })
+        dark.toLight()
+        clearTimeout(this.timer)
+        this.timer = window.setTimeout(
+          () => this.handler(),
+          nowToTargetDiffMillis(this.toDarkTime)
+        )
         break
       case ModeStatus.DARK:
         console.log('dark -->', nowToTargetDiffMillis(this.toLightTime))
-        script.isDark().then((dark) => {
-          if (dark) return
+        if (await dark.isDark()) return
 
-          script.toDark()
-          clearTimeout(this.timer)
-          this.timer = setTimeout(
-            () => this.handler(),
-            nowToTargetDiffMillis(this.toLightTime)
-          )
-        })
+        dark.toDark()
+        clearTimeout(this.timer)
+        this.timer = window.setTimeout(
+          () => this.handler(),
+          nowToTargetDiffMillis(this.toLightTime)
+        )
         break
     }
   }
@@ -87,9 +84,7 @@ class Clock {
   }
 
   daemon() {
-    this.interval = setInterval(() => {
-      this.handler()
-    }, 15 * 1000)
+    this.interval = window.setInterval(() => this.handler(), 15 * 1000)
   }
 }
 

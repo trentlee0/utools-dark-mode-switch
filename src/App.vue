@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import Setting from '@/components/Setting.vue'
-import {useDark} from '@vueuse/core'
+import { useDark } from '@vueuse/core'
 
 useDark()
 </script>

@@ -1,10 +1,11 @@
 {
+  "name": "深色与浅色模式切换",
   "pluginName": "深色与浅色模式切换",
   "description": "深色与浅色模式切换 & 自动切换",
   "author": "Trent0",
   "version": "1.0.0",
   "homepage": "https://github.com/trentlee0/utools-dark-mode-switch",
-  "logo": "icon/day-night.png",
+  "logo": "logo.png",
   "main": "index.html",
   "preload": "preload.js",
   "development": {
@@ -21,7 +22,7 @@
     {
       "code": "dark-light",
       "explain": "深色与浅色模式切换",
-      "icon": "icon/day-night.png",
+      "icon": "logo.png",
       "cmds": [
         "模式切换",
         "深色与浅色",
@@ -50,7 +51,7 @@
     {
       "code": "setting",
       "explain": "深色与浅色模式切换设置",
-      "icon": "icon/day-night.png",
+      "icon": "logo.png",
       "cmds": [
         "深色与浅色模式切换设置",
         "Dark Mode Switch Setting"

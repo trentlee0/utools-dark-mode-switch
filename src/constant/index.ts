@@ -1,3 +1,5 @@
+export * from './enums'
+
 export enum FeatureCode {
   DARK_LIGHT = 'dark-light',
   TO_DARK = 'to-dark',
@@ -10,10 +12,4 @@ export enum StoreKey {
   TO_DARK_TIME = 'toDarkTime',
   TO_LIGHT_TIME = 'toLightTime',
   SETTING = 'setting'
-}
-
-export enum Status {
-  DISABLE,
-  AUTO_TIME,
-  COORDINATE
 }

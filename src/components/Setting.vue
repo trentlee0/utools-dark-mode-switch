@@ -76,48 +76,43 @@
 </template>
 
 <script setup lang="ts">
-import {formatTime, parseTime} from '@/util/common'
-import {getStatusConverter} from '@/constant/status'
-import {ref, onMounted, computed} from 'vue'
-import {useStore} from '@/store'
-import {Status} from '@/constant'
-import {CoordinateModel} from '@/models/CoordinateModel'
-import {getSunrise, getSunset} from '@/util/suntime'
+import { formatTime, parseTime } from '@/utils/common'
+import { ref, computed, reactive } from 'vue'
+import { useStore } from '@/store'
+import { Status } from '@/constant'
+import { CoordinateModel } from '@/models/CoordinateModel'
+import { getSunrise, getSunset } from '@/utils/suntime'
 
 const store = useStore()
 
-const statusConverter = getStatusConverter()
-const options = statusConverter.getLocaleStatuses()
+const options = reactive([
+  Status.desc(Status.DISABLE),
+  Status.desc(Status.AUTO_TIME),
+  Status.desc(Status.COORDINATE)
+])
+
+const lightTime = ref(parseTime(store.toLightTime))
+const darkTime = ref(parseTime(store.toDarkTime))
+const isForceSwitch = ref(store.forceSwitch)
+const switchMode = ref(Status.desc(store.status))
+const latitude = ref(store.coordinate.latitude)
+const longitude = ref(store.coordinate.longitude)
+
 const isDisable = computed(
-  () => statusConverter.localeToStatus(switchMode.value) === Status.DISABLE
+  () => Status.val(switchMode.value) === Status.DISABLE
 )
 const isCustomMode = computed(
-  () => statusConverter.localeToStatus(switchMode.value) === Status.AUTO_TIME
+  () => Status.val(switchMode.value) === Status.AUTO_TIME
 )
 const isCoordinateMode = computed(
-  () => statusConverter.localeToStatus(switchMode.value) === Status.COORDINATE
+  () => Status.val(switchMode.value) === Status.COORDINATE
 )
 
 const sunriseTime = computed(() => getSunrise(latitude.value, longitude.value))
 const sunsetTime = computed(() => getSunset(latitude.value, longitude.value))
 
-const lightTime = ref<Date>(new Date())
-const darkTime = ref<Date>(new Date())
-const isForceSwitch = ref<boolean>(false)
-const switchMode = ref<string>('')
-const latitude = ref(CoordinateModel.DEFAULT.latitude)
-const longitude = ref(CoordinateModel.DEFAULT.longitude)
-onMounted(() => {
-  lightTime.value = parseTime(store.setting.toLightTime)
-  darkTime.value = parseTime(store.setting.toDarkTime)
-  isForceSwitch.value = store.setting.forceSwitch
-  switchMode.value = statusConverter.statusToLocale(store.setting.status)
-  latitude.value = store.setting.coordinate.latitude
-  longitude.value = store.setting.coordinate.longitude
-})
-
 function handleSwitchModeChange() {
-  store.setStatus(statusConverter.localeToStatus(switchMode.value))
+  store.setStatus(Status.val(switchMode.value) ?? Status.DISABLE)
 }
 
 function handleForceSwitchChange() {
