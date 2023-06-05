@@ -4,7 +4,7 @@ import dark from '@/utils/dark'
 enum ModeStatus {
   LIGHT = 0,
   DARK = 1,
-  NO = -1
+  NONE = -1
 }
 
 class Clock {
@@ -48,39 +48,38 @@ class Clock {
       else if (this.toLightTime <= now || now < this.toDarkTime)
         return ModeStatus.LIGHT
     }
-    return ModeStatus.NO
+    return ModeStatus.NONE
+  }
+
+  private nextHandler(delay: number) {
+    window.clearTimeout(this.timer)
+    this.timer = window.setTimeout(() => this.handler(), delay)
   }
 
   async handler() {
     switch (this.modeCondition()) {
       case ModeStatus.LIGHT:
-        console.log('light -->', nowToTargetDiffMillis(this.toDarkTime))
-        if (await dark.isLight()) return
-
-        dark.toLight()
-        clearTimeout(this.timer)
-        this.timer = window.setTimeout(
-          () => this.handler(),
-          nowToTargetDiffMillis(this.toDarkTime)
-        )
+        if (!(await dark.isLight())) dark.toLight()
+        const delayDark = nowToTargetDiffMillis(this.toDarkTime)
+        if (import.meta.env.DEV) {
+          console.log('next: light to dark --> %dms', delayDark)
+        }
+        this.nextHandler(delayDark)
         break
       case ModeStatus.DARK:
-        console.log('dark -->', nowToTargetDiffMillis(this.toLightTime))
-        if (await dark.isDark()) return
-
-        dark.toDark()
-        clearTimeout(this.timer)
-        this.timer = window.setTimeout(
-          () => this.handler(),
-          nowToTargetDiffMillis(this.toLightTime)
-        )
+        if (!(await dark.isDark())) dark.toDark()
+        const delayLight = nowToTargetDiffMillis(this.toLightTime)
+        if (import.meta.env.DEV) {
+          console.log('next: dark to light --> %dms', delayLight)
+        }
+        this.nextHandler(delayLight)
         break
     }
   }
 
   stop() {
-    clearTimeout(this.timer)
-    clearInterval(this.interval)
+    window.clearTimeout(this.timer)
+    window.clearInterval(this.interval)
   }
 
   daemon() {

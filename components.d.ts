@@ -15,7 +15,6 @@ declare module '@vue/runtime-core' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
-    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Setting: typeof import('./src/components/Setting.vue')['default']
   }
 }

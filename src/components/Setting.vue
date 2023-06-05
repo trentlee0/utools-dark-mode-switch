@@ -17,16 +17,23 @@
         </el-select>
       </el-form-item>
       <div v-if="!isDisable">
-        <el-form-item label="强制切换">
-          <el-tooltip placement="right" :show-after="600">
-            <template #content>
-              开启后，每 15 秒检查；否则，仅在每次启动时检查。
-            </template>
+        <el-form-item>
+          <template #label>
+            <span>
+              强制切换
+              <span
+                title="在某些情况下可能并不能完成切换，这时可以考虑开启。开启后，每 15 秒进行检查。"
+                style="font-size: x-small"
+                v-text="'?'"
+              ></span>
+            </span>
+          </template>
+          <template #default>
             <el-switch
               @change="handleForceSwitchChange"
               v-model="isForceSwitch"
             />
-          </el-tooltip>
+          </template>
         </el-form-item>
       </div>
       <div v-if="isCustomMode">

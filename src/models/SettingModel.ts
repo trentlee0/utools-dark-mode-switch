@@ -1,6 +1,6 @@
 import { Status, StoreKey } from '@/constant'
 import { CoordinateModel } from './CoordinateModel'
-import { sync } from 'utools-utils/storage'
+import { storage } from 'utools-utils'
 
 export class SettingModel {
   status: Status
@@ -33,7 +33,7 @@ export class SettingModel {
 
   public static migrateDatabase(setting: SettingModel) {
     let needed = false
-    const status = sync.get<string>(StoreKey.STATUS)
+    const status = storage.sync.get<string>(StoreKey.STATUS)
     if (!status) return needed
 
     if (status) {
@@ -45,21 +45,21 @@ export class SettingModel {
           setting.status = Status.AUTO_TIME
           break
       }
-      sync.remove(StoreKey.STATUS)
+      storage.sync.remove(StoreKey.STATUS)
       needed = true
     }
 
-    const toDarkTime = sync.get<string>(StoreKey.TO_DARK_TIME)
-    const toLightTime = sync.get<string>(StoreKey.TO_LIGHT_TIME)
+    const toDarkTime = storage.sync.get<string>(StoreKey.TO_DARK_TIME)
+    const toLightTime = storage.sync.get<string>(StoreKey.TO_LIGHT_TIME)
     if (toDarkTime) {
       setting.toDarkTime = toDarkTime
-      sync.remove(StoreKey.TO_DARK_TIME)
+      storage.sync.remove(StoreKey.TO_DARK_TIME)
       needed = true
     }
 
     if (toLightTime) {
       setting.toLightTime = toLightTime
-      sync.remove(StoreKey.TO_LIGHT_TIME)
+      storage.sync.remove(StoreKey.TO_LIGHT_TIME)
       needed = true
     }
 

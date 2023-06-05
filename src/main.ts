@@ -5,15 +5,15 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import './style.css'
 import dark from '@/utils/dark'
 import { FeatureCode } from '@/constant'
-import { hideMainWindow, onPluginEnter, outPlugin } from 'utools-api'
+import { onPluginEnter } from 'utools-api'
+import { hideAndOutPlugin } from 'utools-utils'
 
 createApp(App).use(pinia).mount('#app')
 
 onPluginEnter(({ code }) => {
   if (code === FeatureCode.SETTING) return
 
-  hideMainWindow()
-  outPlugin()
+  hideAndOutPlugin()
   switch (code) {
     case FeatureCode.DARK_LIGHT:
       dark.toOther()

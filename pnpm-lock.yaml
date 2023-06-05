@@ -12,7 +12,7 @@ specifiers:
   unplugin-auto-import: ^0.12.0
   unplugin-vue-components: ^0.22.11
   utools-api-types: ^3.0.0
-  utools-utils: ^1.0.3
+  utools-utils: ^1.1.6
   vite: ^3.2.3
   vite-plugin-utools: ^0.5.4
   vue: ^3.2.41
@@ -23,7 +23,7 @@ dependencies:
   element-plus: 2.2.26_vue@3.2.45
   pinia: 2.0.27_mgnvym7yiazkylwwogi5r767ue
   sunrise-sunset-js: 2.2.1
-  utools-utils: 1.0.3
+  utools-utils: 1.1.6
   vue: 3.2.45
 
 devDependencies:
@@ -1484,8 +1484,8 @@ packages:
     resolution: {integrity: sha512-KJYytaX/cnxRTm+fBKeDAV6PhE1Emrv4bZm/6pigVhxEM4StAy8UFGyo22bVARSRIUUxbEdtWIo6O7qmEGnv5A==}
     dev: true
 
-  /utools-utils/1.0.3:
-    resolution: {integrity: sha512-2POXN4gyaxxSy9X5RtPjW4QRbpJH15XxK9hq1G+8tQPUNttlMg0/Sx2PEMS9EcbZKIpHwXdtlG+tKI5A8TBk2w==}
+  /utools-utils/1.1.6:
+    resolution: {integrity: sha512-tcXLXhpw/q+HEF1/VR4g5bhuF7VDbB3SPQIVx2lwY0vH1aA37MjPicRPFdV2VvlXXpFANFP2hC9DJ82GBKOysg==}
     dev: false
 
   /vite-plugin-utools/0.5.4:
